@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { LANGS, tr } from "./i18n";
+import ksmLogo from "./assets/ksm-logo.jpg";
 
 /* ---------------- language context ---------------- */
 const LangCtx = createContext({ lang: "en", setLang: () => {}, t: (k) => k });
@@ -812,8 +813,8 @@ export default function KSMWebsite() {
         transition: "all .3s ease",
       }}>
         <div className="max-w-6xl mx-auto px-5 flex items-center justify-between" style={{ height: 74 }}>
-          <button onClick={() => nav("home")} className="flex items-baseline gap-2" style={{ background: "none", border: "none", cursor: "pointer" }}>
-            <span className="ksm-display text-3xl font-bold tracking-wide" style={goldText}>KSM</span>
+          <button onClick={() => nav("home")} className="flex items-center gap-3" style={{ background: "none", border: "none", cursor: "pointer" }}>
+            <img src={ksmLogo} alt="KSM Business Setup" style={{ height: 46, width: "auto", display: "block", borderRadius: 4 }} />
             <span className="ksm-body text-xs tracking-widest uppercase hidden sm:inline" style={{ color: PAPER }}>{t("brandTag")}</span>
           </button>
           <nav className="hidden xl:flex items-center gap-6 ksm-body text-sm">
@@ -859,8 +860,8 @@ export default function KSMWebsite() {
       <footer className="py-12" style={{ borderTop: `1px solid ${GOLD}22` }}>
         <div className="max-w-6xl mx-auto px-5 grid md:grid-cols-4 gap-10 ksm-body text-sm">
           <div className="md:col-span-2">
-            <div className="ksm-display text-3xl font-bold" style={goldText}>KSM</div>
-            <div className="text-xs tracking-widest uppercase mt-1" style={{ color: `${PAPER}99` }}>Document Clearing · Dubai, UAE</div>
+            <img src={ksmLogo} alt="KSM Business Setup" style={{ height: 64, width: "auto", display: "block", borderRadius: 6 }} />
+            <div className="text-xs tracking-widest uppercase mt-3" style={{ color: `${PAPER}99` }}>{t("brandTag")}</div>
             <p className="font-light mt-4 max-w-sm leading-relaxed" style={{ color: `${PAPER}bb` }}>
               {t("home_sub")}
             </p>
