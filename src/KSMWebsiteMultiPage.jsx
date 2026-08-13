@@ -647,7 +647,7 @@ function ContactPage() {
           <div className="ksm-body space-y-6 text-sm">
             {[
               ["Office", "Dubai, United Arab Emirates"],
-              ["Phone / WhatsApp", "+971 5X XXX XXXX"],
+              ["Phone / WhatsApp", "+971 56 884 6843"],
               ["Email", "info@ksm.ae"],
               ["Hours", "Monday–Saturday, 9:00–18:00 GST"],
             ].map(([t, d]) => (
@@ -670,7 +670,7 @@ function ContactPage() {
               </div>
             ) : (
               <div className="ksm-body space-y-4">
-                {[["Full name *", "name", "text", "Your name"], ["Phone / WhatsApp *", "phone", "tel", "+971 5X XXX XXXX"], ["Email", "email", "email", "you@company.com"]].map(([label, key, type, ph]) => (
+                {[["Full name *", "name", "text", "Your name"], ["Phone / WhatsApp *", "phone", "tel", "+971 56 884 6843"], ["Email", "email", "email", "you@company.com"]].map(([label, key, type, ph]) => (
                   <div key={key}>
                     <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{label}</label>
                     <input type={type} value={form[key]} placeholder={ph} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
@@ -842,7 +842,7 @@ export default function KSMWebsite() {
               <button key={x} onClick={() => nav(r)} className="block py-1 text-left font-light" style={{ background: "none", border: "none", color: `${PAPER}bb`, cursor: "pointer" }}>{x}</button>
             ))}
             <div className="mt-5 font-light" style={{ color: `${PAPER}bb` }}>
-              <div>+971 5X XXX XXXX</div>
+              <div>+971 56 884 6843</div>
               <div>info@ksm.ae</div>
             </div>
           </div>
@@ -854,11 +854,11 @@ export default function KSMWebsite() {
       </footer>
 
       {/* WhatsApp float */}
-      <button onClick={() => nav("contact")} aria-label="Contact KSM"
+      <a href="https://wa.me/971568846843" target="_blank" rel="noopener noreferrer" aria-label="Chat with KSM on WhatsApp"
         className="gold-btn ksm-body fixed bottom-6 right-6 flex items-center gap-2 px-5 py-3 text-sm font-semibold"
-        style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: "pointer", zIndex: 60, borderRadius: 999, boxShadow: `0 8px 30px -8px ${GOLD}88` }}>
+        style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: "pointer", zIndex: 60, borderRadius: 999, boxShadow: `0 8px 30px -8px ${GOLD}88`, textDecoration: "none" }}>
         💬 Chat with KSM
-      </button>
+      </a>
     </div>
   );
 }
