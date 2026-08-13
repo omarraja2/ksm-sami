@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { LANGS, tr } from "./i18n";
+
+/* ---------------- language context ---------------- */
+const LangCtx = createContext({ lang: "en", setLang: () => {}, t: (k) => k });
+const useLang = () => useContext(LangCtx);
 
 /* ==================================================================
    KSM DOCUMENT CLEARING — Business Setup in Dubai
@@ -76,17 +81,20 @@ const PageHero = ({ eyebrow, title, gold, sub }) => (
   </section>
 );
 
-const CTABand = ({ nav, text = "Ready to start? Your first consultation is free — and your quote is fixed in writing." }) => (
+const CTABand = ({ nav, text }) => {
+  const { t } = useLang();
+  return (
   <section className="py-16" style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD} 60%, ${GOLD_DEEP})` }}>
     <div className="max-w-6xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-6">
-      <p className="ksm-display text-2xl md:text-3xl font-semibold" style={{ color: INK }}>{text}</p>
+      <p className="ksm-display text-2xl md:text-3xl font-semibold" style={{ color: INK }}>{text || t("ctaDefault")}</p>
       <button onClick={() => nav("contact")} className="ksm-body px-8 py-4 text-sm font-semibold tracking-widest uppercase shrink-0"
         style={{ background: INK, color: GOLD_LIGHT, border: "none", cursor: "pointer" }}>
-        Book Free Consultation
+        {t("ctaBook")}
       </button>
     </div>
   </section>
-);
+  );
+};
 
 /* ---------------- data ---------------- */
 
@@ -182,28 +190,33 @@ const JUR_LABEL = { freezone: "Free Zone", mainland: "Mainland (DED)", freelance
 /* ---------------- pages ---------------- */
 
 function HomePage({ nav }) {
+  const { t } = useLang();
+  const pillars = [
+    { icon: "🏢", t: t("home_pillar1_t"), d: t("home_pillar1_d"), page: "setup", cta: t("home_pillar1_cta") },
+    { icon: "🪪", t: t("home_pillar2_t"), d: t("home_pillar2_d"), page: "freelance", cta: t("home_pillar2_cta") },
+    { icon: "📑", t: t("home_pillar3_t"), d: t("home_pillar3_d"), page: "clearing", cta: t("home_pillar3_cta") },
+  ];
   return (
     <>
       <section className="relative overflow-hidden" style={{ paddingTop: 160, paddingBottom: 100 }}>
         <div aria-hidden style={{ position: "absolute", inset: 0, background: `radial-gradient(1000px 520px at 70% -10%, ${GOLD}16, transparent 60%), radial-gradient(700px 400px at 5% 110%, ${GOLD}0c, transparent 60%)` }} />
         <div aria-hidden className="ksm-display hidden md:block" style={{ position: "absolute", right: -60, bottom: -70, fontSize: 380, fontWeight: 700, color: `${GOLD}07`, lineHeight: 1, userSelect: "none" }}>KSM</div>
         <div className="max-w-6xl mx-auto px-5 relative">
-          <Eyebrow>Business Setup · Freelance Visas · Document Clearing — Dubai, UAE</Eyebrow>
+          <Eyebrow>{t("home_eyebrow")}</Eyebrow>
           <h1 className="ksm-display font-semibold leading-none mt-4" style={{ fontSize: "clamp(2.8rem,7.5vw,5.6rem)", color: IVORY }}>
-            Your company in Dubai,
+            {t("home_h1a")}
             <br />
-            <span style={goldText}>cleared. licensed. launched.</span>
+            <span style={goldText}>{t("home_h1b")}</span>
           </h1>
           <p className="ksm-body mt-7 max-w-2xl text-lg font-light leading-relaxed">
-            KSM sets up mainland, free zone and offshore companies, arranges freelance and golden visas, and clears
-            every government document in between — so you start trading in days, not months.
+            {t("home_sub")}
           </p>
           <div className="flex flex-wrap gap-4 mt-10">
-            <GoldBtn onClick={() => nav("contact")}>Start Your Setup</GoldBtn>
-            <GoldBtn ghost onClick={() => nav("pricing")}>See Pricing & Estimator</GoldBtn>
+            <GoldBtn onClick={() => nav("contact")}>{t("home_ctaStart")}</GoldBtn>
+            <GoldBtn ghost onClick={() => nav("pricing")}>{t("home_ctaPricing")}</GoldBtn>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px mt-16 ksm-body" style={{ background: `${GOLD}22`, border: `1px solid ${GOLD}22` }}>
-            {[["3–5 days", "fastest license issuance"], ["100%", "foreign ownership"], ["40+", "free zones covered"], ["0%", "personal income tax"]].map(([v, l]) => (
+            {[["3–5 days", t("home_stat1")], ["100%", t("home_stat2")], ["40+", t("home_stat3")], ["0%", t("home_stat4")]].map(([v, l]) => (
               <div key={l} className="p-6" style={{ background: INK_2 }}>
                 <div className="ksm-display text-3xl font-semibold" style={goldText}>{v}</div>
                 <div className="text-xs mt-1 tracking-wide uppercase" style={{ color: `${PAPER}bb` }}>{l}</div>
@@ -216,14 +229,10 @@ function HomePage({ nav }) {
       {/* pillars */}
       <section className="py-20" style={{ background: INK_2 }}>
         <div className="max-w-6xl mx-auto px-5">
-          <Eyebrow>Where do you want to go?</Eyebrow>
-          <H2>Three doors into <span style={goldText}>Dubai</span></H2>
+          <Eyebrow>{t("home_pillarsEye")}</Eyebrow>
+          <H2>{t("home_pillarsTitleA")} <span style={goldText}>{t("home_pillarsTitleB")}</span></H2>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            {[
-              { icon: "🏢", t: "Set up a company", d: "Mainland, free zone or offshore — matched to your activity, market and budget, licensed in days.", page: "setup", cta: "Explore Business Setup" },
-              { icon: "🪪", t: "Work for yourself", d: "A freelance permit with a 2-year residence visa. The lowest-cost legal route to living and working in Dubai.", page: "freelance", cta: "Explore Freelance Visa" },
-              { icon: "📑", t: "Clear the paperwork", d: "Attestation, translation, PRO retainers, renewals — the government work handled while you run the business.", page: "clearing", cta: "Explore Document Clearing" },
-            ].map((c) => (
+            {pillars.map((c) => (
               <button key={c.t} onClick={() => nav(c.page)} className="svc-card text-left p-8 flex flex-col"
                 style={{ background: INK, border: `1px solid ${GOLD}22`, cursor: "pointer" }}>
                 <div className="text-4xl" aria-hidden>{c.icon}</div>
@@ -239,8 +248,8 @@ function HomePage({ nav }) {
       {/* process */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-5">
-          <Eyebrow>The KSM process</Eyebrow>
-          <H2>Five steps. <span style={goldText}>One point of contact.</span></H2>
+          <Eyebrow>{t("home_processEye")}</Eyebrow>
+          <H2>{t("home_processTitleA")} <span style={goldText}>{t("home_processTitleB")}</span></H2>
           <div className="mt-12">
             {STEPS.map((s, i) => (
               <div key={s.n} className="grid md:grid-cols-12 gap-4 py-7" style={{ borderTop: `1px solid ${GOLD}22`, borderBottom: i === STEPS.length - 1 ? `1px solid ${GOLD}22` : "none" }}>
@@ -256,8 +265,8 @@ function HomePage({ nav }) {
       {/* testimonials */}
       <section className="py-20" style={{ background: INK_2 }}>
         <div className="max-w-6xl mx-auto px-5">
-          <Eyebrow center>Client words</Eyebrow>
-          <H2 center>Trusted with the <span style={goldText}>slow part</span></H2>
+          <Eyebrow center>{t("home_testiEye")}</Eyebrow>
+          <H2 center>{t("home_testiTitleA")} <span style={goldText}>{t("home_testiTitleB")}</span></H2>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
             {TESTIMONIALS.map((t) => (
               <div key={t.name} className="p-8 flex flex-col" style={{ background: INK, border: `1px solid ${GOLD}22` }}>
@@ -276,11 +285,11 @@ function HomePage({ nav }) {
       {/* faq teaser */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-5">
-          <Eyebrow center>Questions, answered</Eyebrow>
-          <H2 center>Before you <span style={goldText}>ask</span></H2>
+          <Eyebrow center>{t("home_faqEye")}</Eyebrow>
+          <H2 center>{t("home_faqTitleA")} <span style={goldText}>{t("home_faqTitleB")}</span></H2>
           <FAQList items={FAQS.slice(0, 4)} />
           <div className="text-center mt-10">
-            <GoldBtn ghost onClick={() => nav("contact")}>Ask Us Anything</GoldBtn>
+            <GoldBtn ghost onClick={() => nav("contact")}>{t("home_faqCta")}</GoldBtn>
           </div>
         </div>
       </section>
@@ -637,40 +646,40 @@ function AboutPage({ nav }) {
 }
 
 function ContactPage() {
+  const { t } = useLang();
   const [form, setForm] = useState({ name: "", phone: "", email: "", service: "Free Zone Company Setup", message: "" });
   const [sent, setSent] = useState(false);
   return (
     <>
-      <PageHero eyebrow="Free Consultation" title="Tell us what" gold="you're building." sub="Thirty minutes, no obligation. You'll leave with the right jurisdiction, a realistic timeline, and a fixed quote in writing." />
+      <PageHero eyebrow={t("contact_eyebrow")} title={t("contact_titleA")} gold={t("contact_titleB")} sub={t("contact_sub")} />
       <section className="py-16" style={{ background: INK_2 }}>
         <div className="max-w-6xl mx-auto px-5 grid lg:grid-cols-2 gap-12">
           <div className="ksm-body space-y-6 text-sm">
             {[
-              ["Office", "Dubai, United Arab Emirates"],
-              ["Phone / WhatsApp", "+971 56 884 6843"],
-              ["Email", "info@ksm.ae"],
-              ["Hours", "Monday–Saturday, 9:00–18:00 GST"],
-            ].map(([t, d]) => (
-              <div key={t} className="pb-5" style={{ borderBottom: `1px solid ${GOLD}22` }}>
-                <div className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{t}</div>
+              [t("contact_office"), t("contact_officeVal")],
+              [t("contact_phone"), "+971 56 884 6843"],
+              [t("contact_email"), "info@ksm.ae"],
+              [t("contact_hours"), t("contact_hoursVal")],
+            ].map(([lbl, d]) => (
+              <div key={lbl} className="pb-5" style={{ borderBottom: `1px solid ${GOLD}22` }}>
+                <div className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{lbl}</div>
                 <div className="ksm-display text-2xl font-semibold mt-1" style={{ color: IVORY }}>{d}</div>
               </div>
             ))}
             <p className="font-light leading-relaxed" style={{ color: `${PAPER}bb` }}>
-              Prefer WhatsApp? Most of our clients run their entire setup over chat — quotes, document photos,
-              status updates. Send us a message and it starts there.
+              {t("contact_waNote")}
             </p>
           </div>
           <div className="p-8" style={{ background: INK, border: `1px solid ${GOLD}33` }}>
             {sent ? (
               <div className="text-center py-16">
                 <div className="ksm-display text-5xl" style={goldText}>✦</div>
-                <h3 className="ksm-display text-3xl font-semibold mt-4" style={{ color: GOLD_LIGHT }}>Request received</h3>
-                <p className="ksm-body text-sm font-light mt-3">A KSM consultant will contact you within one working day.</p>
+                <h3 className="ksm-display text-3xl font-semibold mt-4" style={{ color: GOLD_LIGHT }}>{t("contact_sentTitle")}</h3>
+                <p className="ksm-body text-sm font-light mt-3">{t("contact_sentBody")}</p>
               </div>
             ) : (
               <div className="ksm-body space-y-4">
-                {[["Full name *", "name", "text", "Your name"], ["Phone / WhatsApp *", "phone", "tel", "+971 56 884 6843"], ["Email", "email", "email", "you@company.com"]].map(([label, key, type, ph]) => (
+                {[[t("contact_fullName"), "name", "text", t("contact_fullNamePh")], [t("contact_phoneReq"), "phone", "tel", "+971 56 884 6843"], [t("contact_emailOpt"), "email", "email", "you@company.com"]].map(([label, key, type, ph]) => (
                   <div key={key}>
                     <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{label}</label>
                     <input type={type} value={form[key]} placeholder={ph} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
@@ -678,23 +687,23 @@ function ContactPage() {
                   </div>
                 ))}
                 <div>
-                  <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>Service needed</label>
+                  <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{t("contact_serviceLabel")}</label>
                   <select value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })}
                     className="w-full mt-2 px-4 py-3 text-sm" style={{ background: INK_3, border: `1px solid ${GOLD}26`, color: IVORY }}>
                     {["Free Zone Company Setup", "Mainland Company Setup", "Offshore Formation", "Freelance Visa", "Golden Visa", "Family Sponsorship", "Document Clearing / Attestation", "PRO Retainer", "Bank Account Assistance", "Other"].map((o) => <option key={o}>{o}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>Tell us briefly about your plan</label>
+                  <label className="text-xs tracking-widest uppercase" style={{ color: GOLD }}>{t("contact_planLabel")}</label>
                   <textarea rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    placeholder="e.g. E-commerce trading company, 2 partners, 3 visas, need bank account…"
+                    placeholder={t("contact_planPh")}
                     className="w-full mt-2 px-4 py-3 text-sm" style={{ background: INK_3, border: `1px solid ${GOLD}26`, color: IVORY, resize: "vertical" }} />
                 </div>
                 <button onClick={() => form.name && form.phone && setSent(true)} className="gold-btn w-full py-4 text-sm font-semibold tracking-widest uppercase"
                   style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: form.name && form.phone ? "pointer" : "not-allowed", opacity: form.name && form.phone ? 1 : 0.5 }}>
-                  Book My Free Consultation
+                  {t("contact_submit")}
                 </button>
-                <p className="text-xs font-light" style={{ color: `${PAPER}77` }}>* required — we reply within one working day.</p>
+                <p className="text-xs font-light" style={{ color: `${PAPER}77` }}>{t("contact_required")}</p>
               </div>
             )}
           </div>
@@ -727,26 +736,47 @@ function FAQList({ items }) {
 /* ---------------- app shell ---------------- */
 
 const PAGES = {
-  home: { label: "Home", C: HomePage },
-  setup: { label: "Business Setup", C: SetupPage },
-  freelance: { label: "Freelance Visa", C: FreelancePage },
-  visas: { label: "Visa Services", C: VisasPage },
-  clearing: { label: "Document Clearing & PRO", C: ClearingPage },
-  pricing: { label: "Pricing", C: PricingPage },
-  about: { label: "About", C: AboutPage },
-  contact: { label: "Contact", C: ContactPage },
+  home: { key: "nav_home", C: HomePage },
+  setup: { key: "nav_setup", C: SetupPage },
+  freelance: { key: "nav_freelance", C: FreelancePage },
+  visas: { key: "nav_visas", C: VisasPage },
+  clearing: { key: "nav_clearing", C: ClearingPage },
+  pricing: { key: "nav_pricing", C: PricingPage },
+  about: { key: "nav_about", C: AboutPage },
+  contact: { key: "nav_contact", C: ContactPage },
 };
 
 export default function KSMWebsite() {
   const [route, setRoute] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lang, setLangState] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = window.localStorage.getItem("ksm_lang");
+      if (saved && LANGS[saved]) return saved;
+    }
+    return "en";
+  });
+
+  const dir = LANGS[lang].dir;
+  const t = (k) => tr(lang, k);
+  const setLang = (l) => {
+    setLangState(l);
+    if (typeof window !== "undefined") window.localStorage.setItem("ksm_lang", l);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.dir = dir;
+      document.documentElement.lang = lang;
+    }
+  }, [dir, lang]);
 
   const nav = (r) => {
     setRoute(r);
@@ -757,7 +787,8 @@ export default function KSMWebsite() {
   const Page = PAGES[route].C;
 
   return (
-    <div style={{ background: INK, color: PAPER, fontFamily: "'Georgia','Times New Roman',serif", minHeight: "100vh" }}>
+    <LangCtx.Provider value={{ lang, setLang, t }}>
+    <div dir={dir} style={{ background: INK, color: PAPER, fontFamily: "'Georgia','Times New Roman',serif", minHeight: "100vh" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap');
         .ksm-display { font-family: 'Cormorant Garamond', Georgia, serif; }
@@ -783,32 +814,36 @@ export default function KSMWebsite() {
         <div className="max-w-6xl mx-auto px-5 flex items-center justify-between" style={{ height: 74 }}>
           <button onClick={() => nav("home")} className="flex items-baseline gap-2" style={{ background: "none", border: "none", cursor: "pointer" }}>
             <span className="ksm-display text-3xl font-bold tracking-wide" style={goldText}>KSM</span>
-            <span className="ksm-body text-xs tracking-widest uppercase hidden sm:inline" style={{ color: PAPER }}>Document Clearing · Dubai</span>
+            <span className="ksm-body text-xs tracking-widest uppercase hidden sm:inline" style={{ color: PAPER }}>{t("brandTag")}</span>
           </button>
           <nav className="hidden xl:flex items-center gap-6 ksm-body text-sm">
             {Object.entries(PAGES).filter(([k]) => k !== "contact").map(([k, v]) => (
               <button key={k} onClick={() => nav(k)}
                 style={{ background: "none", border: "none", cursor: "pointer", letterSpacing: ".04em", color: route === k ? GOLD_LIGHT : PAPER, borderBottom: route === k ? `1px solid ${GOLD}` : "1px solid transparent", paddingBottom: 3 }}
                 onMouseEnter={(e) => (e.target.style.color = GOLD)} onMouseLeave={(e) => (e.target.style.color = route === k ? GOLD_LIGHT : PAPER)}>
-                {v.label}
+                {t(v.key)}
               </button>
             ))}
+            <LangSwitcher lang={lang} setLang={setLang} />
             <button onClick={() => nav("contact")} className="gold-btn px-5 py-2 text-sm font-medium tracking-wide"
               style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: "pointer" }}>
-              Free Consultation
+              {t("navFreeConsult")}
             </button>
           </nav>
-          <button className="xl:hidden text-2xl" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"
-            style={{ background: "none", border: `1px solid ${GOLD}44`, color: GOLD, width: 42, height: 42, cursor: "pointer" }}>
-            {menuOpen ? "✕" : "☰"}
-          </button>
+          <div className="flex items-center gap-2 xl:hidden">
+            <LangSwitcher lang={lang} setLang={setLang} compact />
+            <button className="text-2xl" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu"
+              style={{ background: "none", border: `1px solid ${GOLD}44`, color: GOLD, width: 42, height: 42, cursor: "pointer" }}>
+              {menuOpen ? "✕" : "☰"}
+            </button>
+          </div>
         </div>
         {menuOpen && (
           <div className="xl:hidden px-5 pb-5 ksm-body" style={{ borderBottom: `1px solid ${GOLD}22`, maxHeight: "70vh", overflowY: "auto" }}>
             {Object.entries(PAGES).map(([k, v]) => (
               <button key={k} onClick={() => nav(k)} className="block w-full text-left py-3 text-base"
                 style={{ background: "none", border: "none", color: route === k ? GOLD_LIGHT : PAPER, borderBottom: `1px solid ${GOLD}14`, cursor: "pointer" }}>
-                {v.label}
+                {t(v.key)}
               </button>
             ))}
           </div>
@@ -827,19 +862,19 @@ export default function KSMWebsite() {
             <div className="ksm-display text-3xl font-bold" style={goldText}>KSM</div>
             <div className="text-xs tracking-widest uppercase mt-1" style={{ color: `${PAPER}99` }}>Document Clearing · Dubai, UAE</div>
             <p className="font-light mt-4 max-w-sm leading-relaxed" style={{ color: `${PAPER}bb` }}>
-              Business setup, freelance & golden visas, PRO services and document clearing — handled end to end from our Dubai office.
+              {t("home_sub")}
             </p>
           </div>
           <div>
-            <div className="text-xs tracking-widest uppercase mb-4" style={{ color: GOLD }}>Services</div>
-            {[["Business Setup", "setup"], ["Freelance Visa", "freelance"], ["Visa Services", "visas"], ["Document Clearing & PRO", "clearing"]].map(([x, r]) => (
-              <button key={x} onClick={() => nav(r)} className="block py-1 text-left font-light" style={{ background: "none", border: "none", color: `${PAPER}bb`, cursor: "pointer" }}>{x}</button>
+            <div className="text-xs tracking-widest uppercase mb-4" style={{ color: GOLD }}>{t("nav_setup")}</div>
+            {[[t("nav_setup"), "setup"], [t("nav_freelance"), "freelance"], [t("nav_visas"), "visas"], [t("nav_clearing"), "clearing"]].map(([x, r]) => (
+              <button key={r} onClick={() => nav(r)} className="block py-1 text-left font-light" style={{ background: "none", border: "none", color: `${PAPER}bb`, cursor: "pointer" }}>{x}</button>
             ))}
           </div>
           <div>
-            <div className="text-xs tracking-widest uppercase mb-4" style={{ color: GOLD }}>Company</div>
-            {[["Pricing", "pricing"], ["About", "about"], ["Contact", "contact"]].map(([x, r]) => (
-              <button key={x} onClick={() => nav(r)} className="block py-1 text-left font-light" style={{ background: "none", border: "none", color: `${PAPER}bb`, cursor: "pointer" }}>{x}</button>
+            <div className="text-xs tracking-widest uppercase mb-4" style={{ color: GOLD }}>{t("nav_about")}</div>
+            {[[t("nav_pricing"), "pricing"], [t("nav_about"), "about"], [t("nav_contact"), "contact"]].map(([x, r]) => (
+              <button key={r} onClick={() => nav(r)} className="block py-1 text-left font-light" style={{ background: "none", border: "none", color: `${PAPER}bb`, cursor: "pointer" }}>{x}</button>
             ))}
             <div className="mt-5 font-light" style={{ color: `${PAPER}bb` }}>
               <div>+971 56 884 6843</div>
@@ -855,10 +890,41 @@ export default function KSMWebsite() {
 
       {/* WhatsApp float */}
       <a href="https://wa.me/971568846843" target="_blank" rel="noopener noreferrer" aria-label="Chat with KSM on WhatsApp"
-        className="gold-btn ksm-body fixed bottom-6 right-6 flex items-center gap-2 px-5 py-3 text-sm font-semibold"
-        style={{ background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: "pointer", zIndex: 60, borderRadius: 999, boxShadow: `0 8px 30px -8px ${GOLD}88`, textDecoration: "none" }}>
-        💬 Chat with KSM
+        className="gold-btn ksm-body fixed bottom-6 flex items-center gap-2 px-5 py-3 text-sm font-semibold"
+        style={{ [dir === "rtl" ? "left" : "right"]: 24, bottom: 24, background: `linear-gradient(120deg, ${GOLD_LIGHT}, ${GOLD})`, color: INK, border: "none", cursor: "pointer", zIndex: 60, borderRadius: 999, boxShadow: `0 8px 30px -8px ${GOLD}88`, textDecoration: "none" }}>
+        {t("chatKSM")}
       </a>
+    </div>
+    </LangCtx.Provider>
+  );
+}
+
+/* ---------------- language switcher ---------------- */
+function LangSwitcher({ lang, setLang, compact }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: "relative" }}>
+      <button onClick={() => setOpen((o) => !o)} aria-label="Change language" aria-expanded={open}
+        className="ksm-body flex items-center gap-1 text-sm"
+        style={{ background: "none", border: `1px solid ${GOLD}44`, color: GOLD_LIGHT, cursor: "pointer", padding: compact ? "0 10px" : "6px 12px", height: 42, borderRadius: 4, minWidth: 52, justifyContent: "center" }}>
+        <span aria-hidden>🌐</span>
+        <span style={{ fontWeight: 600 }}>{LANGS[lang].label}</span>
+      </button>
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 70 }} />
+          <div style={{ position: "absolute", top: 48, insetInlineEnd: 0, minWidth: 150, background: "rgba(11,11,13,.98)", border: `1px solid ${GOLD}33`, borderRadius: 6, zIndex: 71, overflow: "hidden", boxShadow: `0 12px 40px -10px #000` }}>
+            {Object.entries(LANGS).map(([code, meta]) => (
+              <button key={code} onClick={() => { setLang(code); setOpen(false); }}
+                className="ksm-body w-full flex items-center justify-between gap-3 px-4 py-3 text-sm"
+                style={{ background: lang === code ? `${GOLD}1f` : "transparent", border: "none", borderBottom: `1px solid ${GOLD}14`, color: lang === code ? GOLD_LIGHT : PAPER, cursor: "pointer", textAlign: meta.dir === "rtl" ? "right" : "left" }}>
+                <span>{meta.name}</span>
+                <span style={{ color: GOLD, fontWeight: 600 }}>{meta.label}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
